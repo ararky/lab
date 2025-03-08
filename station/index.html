@@ -205,7 +205,6 @@
 </head>
 
 <body>
-
     <h1>駅ランク判定</h1>
     <div class="container">
         <form onsubmit="checkRank(); return false;">
@@ -214,13 +213,10 @@
         </form>
         <p id="result"></p>
     </div>
-
     <div id="stationGrid"></div>
-
     <div id="popup" class="popup">
         <p id="popupContent"></p>
     </div>
-
     <script>
         let stations = [];
         let rankedStations = Array(100).fill(null);
@@ -250,19 +246,16 @@
 
                 if (station) {
                     item.textContent = station.駅名;
-
                     const rankNumber = document.createElement("span");
                     rankNumber.className = "rank-number";
                     rankNumber.textContent = station.順位;
                     item.appendChild(rankNumber);
-
                     item.onclick = () => showPopup(station);
-                    item.classList.add("correct-item"); // 正解したグリッドにクラスを付与
+                    item.classList.add("correct-item");
                 } else {
                     item.textContent = `${i + 1}位`;
                     item.className += " empty-item";
                 }
-
                 grid.appendChild(item);
             }
         }
@@ -288,21 +281,23 @@
 
             const found = stations.find(station => normalizeText(station.駅名).includes(input));
 
-            if (found && found.順位 <= 100) {
-                rankedStations[found.順位 - 1] = found;
-                displayGrid();
-                result.textContent = `✅ ${found.駅名} は ${found.順位} 位でランクイン！`;
-                result.className = "rank-in";
+            if (found) {
+                if (found.順位 <= 100) {
+                    rankedStations[found.順位 - 1] = found;
+                    displayGrid();
+                    result.textContent = `✅ ${found.駅名} は ${found.順位} 位でランクイン！`;
+                    result.className = "rank-in";
+                } else {
+                    result.textContent = `✅ ${found.駅名} は ${found.順位} 位です！`;
+                    result.className = "rank-in";
+                }
             } else {
                 result.textContent = `❌ ${input} を含む駅は圏外です`;
                 result.className = "out";
             }
-
             result.style.opacity = 1;
         }
-
         loadStations();
     </script>
-
 </body>
 </html>
