@@ -171,7 +171,6 @@
 
 <body>
 
-    <h1>駅ランク判定</h1>
     <div class="container">
         <form onsubmit="checkRank(); return false;">
             <input type="text" id="stationInput" placeholder="駅名を入力">
@@ -187,7 +186,7 @@
     </div>
 
     <script>
-        let stations = []; // stations配列を定義
+        let stations = [];
 
         async function loadStations() {
             try {
@@ -250,7 +249,7 @@
             result.style.opacity = 1;
         }
 
-        loadStations().then(() => displayGrid(stations)); // 初回ロード時にグリッドを表示
+        loadStations(); // 初回ロード時にデータ読み込みのみ実行
     </script>
 
 </body>
