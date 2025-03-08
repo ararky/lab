@@ -258,6 +258,7 @@
                     item.appendChild(rankNumber);
 
                     item.onclick = () => showPopup(station);
+                    item.classList.add("correct-item"); // 正解したグリッドにクラスを付与
                 } else {
                     item.textContent = `${i + 1}位`;
                     item.className += " empty-item";
