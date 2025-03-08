@@ -161,12 +161,21 @@
             }
 
             #stationGrid {
-                grid-template-columns: repeat(5, 1fr); /* スマートフォン向けに列数を5に変更 */
+                display: grid;
+                grid-template-columns: repeat(10, 1fr);
+                gap: 5px;
+                margin-top: 30px;
             }
 
             .grid-item {
-                padding: 5px; /* スマートフォン向けにパディングを調整 */
-                font-size: 0.8rem; /* スマートフォン向けにフォントサイズを調整 */
+                background: rgba(255, 255, 255, 0.05);
+                padding: 12px;
+                border-radius: 10px;
+                text-align: center;
+                cursor: pointer;
+                transition: background 0.3s ease;
+                position: relative;
+                font-size: 1.2rem;
             }
 
             .rank-number {
@@ -174,17 +183,24 @@
             }
         }
 
-        /* デスクトップ向けのスタイル */
-        @media (min-width: 601px) {
-            .grid-item {
-                padding: 10px; /* デスクトップ向けにパディングを調整 */
-                font-size: 1.2rem; /* デスクトップ向けにフォントサイズを調整 */
-            }
-
-            .rank-number {
-                font-size: 0.7rem; /* デスクトップ向けにフォントサイズを調整 */
-            }
+    /* デスクトップ向けのスタイル */
+    @media (min-width: 601px) {
+        #stationGrid {
+            grid-template-columns: repeat(10, 1fr) !important; /* !importantを追加 */
+            gap: 5px;
+            margin-top: 30px;
         }
+
+        .grid-item {
+            padding: 10px !important; /* !importantを追加 */
+            font-size: 1.2rem !important; /* !importantを追加 */
+        }
+
+        .rank-number {
+            font-size: 0.7rem !important; /* !importantを追加 */
+        }
+    }
+
     </style>
 
 </head>
