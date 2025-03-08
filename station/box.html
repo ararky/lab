@@ -178,7 +178,7 @@
             font-size: 0.8rem;
             color: #ccc;
         }
-
+        
     </style>
 </head>
 
@@ -201,7 +201,6 @@
 
     <script>
         let stations = [];
-        let rankedStations = []; // 検索結果を保持する配列
 
         async function loadStations() {
             try {
@@ -227,13 +226,8 @@
                 item.className = "grid-item";
 
                 const stationName = document.createElement("span");
-                stationName.textContent = station.駅名;
+                stationName.textContent = `${station.駅名} (${station.順位}位)`; // 駅名と順位を併記
                 item.appendChild(stationName);
-
-                const rankNumber = document.createElement("span");
-                rankNumber.className = "rank-number";
-                rankNumber.textContent = station.順位;
-                item.appendChild(rankNumber);
 
                 item.onclick = () => showPopup(station);
                 grid.appendChild(item);
@@ -262,8 +256,7 @@
             const found = stations.find(station => normalizeText(station.駅名).includes(input));
 
             if (found && found.順位 <= 100) {
-                rankedStations.push(found); // 検索結果を保持
-                displayGrid(rankedStations);
+                displayGrid([found]);
                 result.textContent = `✅ ${found.駅名} は ${found.順位} 位でランクイン！`;
                 result.className = "rank-in";
             } else {
@@ -274,7 +267,7 @@
             result.style.opacity = 1;
         }
 
-        loadStations();
+        loadStations(); // 初回ロード時にデータ読み込みのみ実行
     </script>
 
 </body>
