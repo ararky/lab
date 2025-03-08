@@ -1,8 +1,10 @@
+
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>駅名ランク判定</title>
     <style>
         body {
@@ -13,56 +15,56 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
-            min-height: 100vh; /* 修正: height を min-height に変更 */
+            justify-content: flex-start;
+            min-height: 100vh;
             margin: 0;
-            font-size: 28px;
-            padding: 20px; /* 修正: 全体的なパディングを追加 */
-            box-sizing: border-box; /* 修正: パディングをボックスモデルに含める */
+            font-size: 24px;
+            padding: 20px;
+            box-sizing: border-box;
         }
 
         h1 {
-            font-size: 3rem; /* 修正: スマートフォンでの見やすさを考慮してサイズを調整 */
+            font-size: 3rem;
             color: #64ffda;
-            margin-bottom: 30px;
+            margin: 30px 0;
             text-shadow: 0 0 10px #64ffda;
         }
 
         .container {
             background: rgba(255, 255, 255, 0.05);
-            padding: 40px; /* 修正: スマートフォンでのパディングを調整 */
+            padding: 30px;
             border-radius: 20px;
-            width: 90%; /* 修正: スマートフォンでの幅を調整 */
-            max-width: 600px; /* 修正: 最大幅を調整 */
+            width: 90%;
+            max-width: 500px;
             box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
-            box-sizing: border-box; /* 修正: パディングをボックスモデルに含める */
+            box-sizing: border-box;
         }
 
         input {
-            width: 100%; /* 修正: スマートフォンでの幅を調整 */
-            padding: 20px; /* 修正: スマートフォンでのパディングを調整 */
-            font-size: 1.8rem; /* 修正: スマートフォンでのフォントサイズを調整 */
+            width: 100%;
+            padding: 18px;
+            font-size: 1.6rem;
             border: 2px solid #64ffda;
             border-radius: 15px;
             text-align: center;
             background: #1e1e1e;
             color: #64ffda;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
             outline: none;
-            box-sizing: border-box; /* 修正: パディングをボックスモデルに含める */
+            box-sizing: border-box;
         }
 
         button {
-            width: 100%; /* 修正: スマートフォンでの幅を調整 */
-            padding: 20px; /* 修正: スマートフォンでのパディングを調整 */
-            font-size: 1.8rem; /* 修正: スマートフォンでのフォントサイズを調整 */
+            width: 100%;
+            padding: 18px;
+            font-size: 1.6rem;
             border: none;
             border-radius: 15px;
             background: linear-gradient(to right, #64ffda, #00bfa5);
             color: #121212;
             cursor: pointer;
             transition: transform 0.2s ease-in-out;
-            box-sizing: border-box; /* 修正: パディングをボックスモデルに含める */
+            box-sizing: border-box;
         }
 
         button:hover {
@@ -70,12 +72,12 @@
         }
 
         #result {
-            margin-top: 30px; /* 修正: スマートフォンでのマージンを調整 */
-            font-size: 2.5rem; /* 修正: スマートフォンでのフォントサイズを調整 */
+            margin-top: 25px;
+            font-size: 2rem;
             font-weight: bold;
             color: #64ffda;
             text-shadow: 0 0 15px #64ffda;
-            word-break: break-all; /* 修正: 長い結果を折り返す */
+            word-break: break-all;
         }
 
         .rank-in {
@@ -93,7 +95,28 @@
             }
 
             .container {
-                padding: 30px;
+                padding: 25px;
+            }
+        }
+
+        /* デスクトップ向けのスタイル */
+        @media (min-width: 601px) {
+            .container {
+                max-width: 800px; /* 修正: デスクトップでの最大幅を調整 */
+                padding: 40px; /* 修正: デスクトップでのパディングを調整 */
+            }
+
+            h1 {
+                font-size: 4rem; /* 修正: デスクトップでのフォントサイズを調整 */
+            }
+
+            input, button {
+                font-size: 2rem; /* 修正: デスクトップでのフォントサイズを調整 */
+                padding: 20px; /* 修正: デスクトップでのパディングを調整 */
+            }
+
+            #result {
+                font-size: 2.5rem; /* 修正: デスクトップでのフォントサイズを調整 */
             }
         }
     </style>
@@ -108,6 +131,7 @@
         </form>
         <p id="result"></p>
     </div>
+
 
     <script>
         let stations = [];
