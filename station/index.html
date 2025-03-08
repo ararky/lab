@@ -269,34 +269,35 @@
         }
 
         async function checkRank() {
-            const input = normalizeText(document.getElementById("stationInput").value);
-            const result = document.getElementById("result");
+    const input = normalizeText(document.getElementById("stationInput").value);
+    const result = document.getElementById("result");
 
-            if (!input) {
-                result.textContent = "駅名を入力してください";
-                result.className = "out";
-                result.style.opacity = 1;
-                return;
-            }
+    if (!input) {
+        result.textContent = "駅名を入力してください";
+        result.className = "out";
+        result.style.opacity = 1;
+        return;
+    }
 
-            const found = stations.find(station => normalizeText(station.駅名).includes(input));
+    const found = stations.find(station => normalizeText(station.駅名).includes(input));
 
-            if (found) {
-                if (found.順位 <= 100) {
-                    rankedStations[found.順位 - 1] = found;
-                    displayGrid();
-                    result.textContent = `✅ ${found.駅名} は ${found.順位} 位でランクイン！`;
-                    result.className = "rank-in";
-                } else {
-                    result.textContent = `✅ ${found.駅名} は ${found.順位} 位です！`;
-                    result.className = "rank-in";
-                }
-            } else {
-                result.textContent = `❌ ${input} を含む駅は圏外です`;
-                result.className = "out";
-            }
-            result.style.opacity = 1;
+    if (found) {
+        const rank = parseInt(found.順位); // 順位を数値に変換
+        if (rank <= 100) {
+            rankedStations[rank - 1] = found;
+            displayGrid();
+            result.textContent = `✅ ${found.駅名} は ${rank} 位でランクイン！`;
+            result.className = "rank-in";
+        } else {
+            result.textContent = `✅ ${found.駅名} は ${rank} 位です！`;
+            result.className = "rank-in";
         }
+    } else {
+        result.textContent = `❌ ${input} を含む駅は圏外です`;
+        result.className = "out";
+    }
+    result.style.opacity = 1;
+}
         loadStations();
     </script>
 </body>
