@@ -179,7 +179,21 @@
             color: #ccc;
         }
         
+        #stationGrid {
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px; /* グリッド間のギャップを調整 */
+        }
+
+        .grid-item {
+            padding: 10px; /* グリッドアイテムのパディングを調整 */
+        }
+
+        .empty-item {
+            background: rgba(255, 255, 255, 0.02); /* 未回答の背景色を調整 */
+            cursor: default; /* 未回答はクリック不可 */
+        }
     </style>
+
 </head>
 
 <body>
@@ -201,6 +215,7 @@
 
     <script>
         let stations = [];
+        let rankedStations = [];
 
         async function loadStations() {
             try {
@@ -216,20 +231,25 @@
             return text.trim().replace(/\s+/g, "").toLowerCase();
         }
 
-        function displayGrid(stationsToDisplay) {
+        function displayGrid() {
             const grid = document.getElementById("stationGrid");
             grid.innerHTML = "";
 
-            for (let i = 0; i < Math.min(100, stationsToDisplay.length); i++) {
-                const station = stationsToDisplay[i];
+            const sortedStations = rankedStations.slice().sort((a, b) => a.順位 - b.順位); // 順位でソート
+
+            for (let i = 1; i <= 100; i++) {
+                const foundStation = sortedStations.find(station => station.順位 === i);
                 const item = document.createElement("div");
                 item.className = "grid-item";
 
-                const stationName = document.createElement("span");
-                stationName.textContent = `${station.駅名} (${station.順位}位)`; // 駅名と順位を併記
-                item.appendChild(stationName);
+                if (foundStation) {
+                    item.textContent = `${foundStation.駅名} (${foundStation.順位}位)`;
+                    item.onclick = () => showPopup(foundStation);
+                } else {
+                    item.textContent = `${i}位`; // 未回答は順位のみ表示
+                    item.className += " empty-item"; // 未回答のスタイルを適用
+                }
 
-                item.onclick = () => showPopup(station);
                 grid.appendChild(item);
             }
         }
@@ -256,7 +276,8 @@
             const found = stations.find(station => normalizeText(station.駅名).includes(input));
 
             if (found && found.順位 <= 100) {
-                displayGrid([found]);
+                rankedStations.push(found);
+                displayGrid();
                 result.textContent = `✅ ${found.駅名} は ${found.順位} 位でランクイン！`;
                 result.className = "rank-in";
             } else {
@@ -267,7 +288,7 @@
             result.style.opacity = 1;
         }
 
-        loadStations(); // 初回ロード時にデータ読み込みのみ実行
+        loadStations();
     </script>
 
 </body>
