@@ -1,0 +1,257 @@
+
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>駅名ランクグリッド</title>
+    <style>
+        body {
+            font-family: 'Arial Black', sans-serif;
+            background: #121212;
+            color: #e0e0e0;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            font-size: 24px;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        h1 {
+            font-size: 3rem;
+            color: #64ffda;
+            margin: 30px 0;
+            text-shadow: 0 0 10px #64ffda;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 30px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
+            box-sizing: border-box;
+        }
+
+        input {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.6rem;
+            border: 2px solid #64ffda;
+            border-radius: 15px;
+            text-align: center;
+            background: #1e1e1e;
+            color: #64ffda;
+            margin-bottom: 25px;
+            outline: none;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 18px;
+            font-size: 1.6rem;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(to right, #64ffda, #00bfa5);
+            color: #121212;
+            cursor: pointer;
+            transition: transform 0.2s ease-in-out;
+            box-sizing: border-box;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        #result {
+            margin-top: 25px;
+            font-size: 2rem;
+            font-weight: bold;
+            color: #64ffda;
+            text-shadow: 0 0 15px #64ffda;
+            word-break: break-all;
+        }
+
+        .rank-in {
+            color: #a5d6a7;
+        }
+
+        .out {
+            color: #ef9a9a;
+        }
+
+        /* メディアクエリ */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 25px;
+            }
+        }
+
+        /* デスクトップ向けのスタイル */
+        @media (min-width: 601px) {
+            .container {
+                max-width: 800px; /* 修正: デスクトップでの最大幅を調整 */
+                padding: 40px; /* 修正: デスクトップでのパディングを調整 */
+            }
+
+            h1 {
+                font-size: 4rem; /* 修正: デスクトップでのフォントサイズを調整 */
+            }
+
+            input, button {
+                font-size: 2rem; /* 修正: デスクトップでのフォントサイズを調整 */
+                padding: 20px; /* 修正: デスクトップでのパディングを調整 */
+            }
+
+            #result {
+                font-size: 2.5rem; /* 修正: デスクトップでのフォントサイズを調整 */
+            }
+        }
+
+
+        #stationGrid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .grid-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-in-out forwards;
+        }
+
+        .grid-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
+            z-index: 1000;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>駅ランク判定</h1>
+    <div class="container">
+        <form onsubmit="checkRank(); return false;">
+            <input type="text" id="stationInput" placeholder="駅名を入力">
+            <input type="submit" style="display: none;">
+        </form>
+        <p id="result"></p>
+    </div>
+
+    <div id="stationGrid"></div>
+
+    <div id="popup" class="popup">
+        <p id="popupContent"></p>
+    </div>
+
+    <script>
+        let stations = []; // stations配列を定義
+
+        async function loadStations() {
+            try {
+                const response = await fetch('station.json');
+                stations = await response.json();
+                console.log("データ読み込み成功:", stations);
+            } catch (error) {
+                console.error("JSONの読み込みに失敗しました:", error);
+            }
+        }
+
+        function normalizeText(text) {
+            return text.trim().replace(/\s+/g, "").toLowerCase();
+        }
+
+        function displayGrid(stations) {
+            const grid = document.getElementById("stationGrid");
+            grid.innerHTML = "";
+
+            for (let i = 0; i < Math.min(100, stations.length); i++) {
+                const station = stations[i];
+                const item = document.createElement("div");
+                item.className = "grid-item";
+                item.textContent = station.駅名;
+                item.onclick = () => showPopup(station);
+                grid.appendChild(item);
+            }
+        }
+
+        function showPopup(station) {
+            const popup = document.getElementById("popup");
+            const content = document.getElementById("popupContent");
+            content.textContent = `順位: ${station.順位}, 駅名: ${station.駅名}, 乗降客数: ${station.乗降客数}`;
+            popup.style.display = "block";
+            popup.onclick = () => popup.style.display = "none";
+        }
+
+        async function checkRank() {
+            const input = normalizeText(document.getElementById("stationInput").value);
+            const result = document.getElementById("result");
+
+            if (!input) {
+                result.textContent = "駅名を入力してください";
+                result.className = "out";
+                result.style.opacity = 1;
+                return;
+            }
+
+            const found = stations.find(station => normalizeText(station.駅名).includes(input));
+
+            if (found && found.順位 <= 100) {
+                displayGrid([found]);
+                result.textContent = `✅ ${found.駅名} は ${found.順位} 位でランクイン！`;
+                result.className = "rank-in";
+            } else {
+                result.textContent = `❌ ${input} を含む駅は圏外です`;
+                result.className = "out";
+            }
+
+            result.style.opacity = 1;
+        }
+
+        loadStations().then(() => displayGrid(stations)); // 初回ロード時にグリッドを表示
+    </script>
+
+</body>
+</html>
