@@ -5,12 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>駅名ランク判定</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
-
         body {
-            font-family: 'Orbitron', sans-serif;
-            background: #0a0a0a;
-            color: #fff;
+            font-family: 'Arial Black', sans-serif; /* 太字フォントに変更 */
+            background: #121212; /* ダークモードの背景色 */
+            color: #e0e0e0;
             text-align: center;
             display: flex;
             flex-direction: column;
@@ -18,111 +16,79 @@
             justify-content: center;
             height: 100vh;
             margin: 0;
-            overflow: hidden;
+            font-size: 28px; /* フォントサイズをさらに大きく */
         }
 
         h1 {
-            font-size: 2.2rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #0ff;
-            text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+            font-size: 4rem;
+            color: #64ffda; /* ネオンカラー */
+            margin-bottom: 30px;
+            text-shadow: 0 0 10px #64ffda;
         }
 
         .container {
             background: rgba(255, 255, 255, 0.05);
-            padding: 20px;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            padding: 60px;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 900px;
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
         }
 
         input {
-            width: 300px;
-            padding: 12px;
-            font-size: 1.2rem;
-            border: none;
-            border-radius: 8px;
+            width: 90%;
+            padding: 25px;
+            font-size: 2rem;
+            border: 2px solid #64ffda;
+            border-radius: 15px;
             text-align: center;
-            background: #111;
-            color: #0ff;
+            background: #1e1e1e;
+            color: #64ffda;
+            margin-bottom: 30px;
             outline: none;
-            font-family: 'Orbitron', sans-serif;
-            transition: 0.3s;
-            box-shadow: 0 0 8px rgba(0, 255, 255, 0.5);
-        }
-
-        input:focus {
-            box-shadow: 0 0 15px rgba(0, 255, 255, 0.8);
         }
 
         button {
-            margin-top: 15px;
-            padding: 12px 20px;
-            font-size: 1.2rem;
-            border: 2px solid #0ff;
-            border-radius: 8px;
-            background: transparent;
-            color: #0ff;
+            padding: 25px 50px;
+            font-size: 2rem;
+            border: none;
+            border-radius: 15px;
+            background: linear-gradient(to right, #64ffda, #00bfa5);
+            color: #121212;
             cursor: pointer;
-            transition: 0.3s ease-in-out;
-            font-family: 'Orbitron', sans-serif;
-            text-transform: uppercase;
+            transition: transform 0.2s ease-in-out;
         }
 
         button:hover {
-            background: #0ff;
-            color: #000;
-            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            transform: scale(1.05);
         }
 
         #result {
-            margin-top: 20px;
-            font-size: 1.5rem;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
+            margin-top: 40px;
+            font-size: 3rem;
+            font-weight: bold;
+            color: #64ffda;
+            text-shadow: 0 0 15px #64ffda;
         }
 
         .rank-in {
-            color: #0f0;
-            text-shadow: 0 0 15px rgba(0, 255, 0, 0.8);
+            color: #a5d6a7;
         }
 
         .out {
-            color: #f00;
-            text-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
-        }
-
-        .neon-line {
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(to right, transparent, #0ff, transparent);
-            box-shadow: 0 0 8px rgba(0, 255, 255, 0.6);
-            margin-top: 20px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% {
-                opacity: 0.6;
-            }
-            50% {
-                opacity: 1;
-            }
+            color: #ef9a9a;
         }
     </style>
 </head>
 <body>
 
-
     <h1>駅ランク判定</h1>
     <div class="container">
-        <input type="text" id="stationInput" placeholder="駅名を入力">
-        <button onclick="checkRank()">判定する</button>
+        <form onsubmit="checkRank(); return false;">
+            <input type="text" id="stationInput" placeholder="駅名を入力">
+            <input type="submit" style="display: none;"> </form>
         <p id="result"></p>
     </div>
-    <div class="neon-line"></div>
 
     <script>
         let stations = [];
