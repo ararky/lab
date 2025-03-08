@@ -90,13 +90,26 @@
     
         /* メディアクエリ */
         @media (max-width: 600px) {
-            h1 {
-                font-size: 2.5rem;
-            }
-    
-            .container {
-                padding: 25px;
-            }
+        h1 {
+            font-size: 2.5rem;
+        }
+
+        .container {
+            padding: 25px;
+        }
+
+        #stationGrid {
+            grid-template-columns: repeat(5, 1fr); /* 列数を5に変更 */
+            gap: 3px; /* ギャップを調整 */
+        }
+
+        .grid-item {
+            padding: 8px; /* パディングを調整 */
+            font-size: 1rem; /* フォントサイズを調整 */
+        }
+
+        .rank-number {
+            font-size: 0.6rem; /* フォントサイズを調整 */
         }
     
         /* デスクトップ向けのスタイル */
