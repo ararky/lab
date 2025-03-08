@@ -215,7 +215,7 @@
 
     <script>
         let stations = [];
-        let rankedStations = [];
+        let rankedStations = Array(100).fill(null); // 1-100位の空の配列で初期化
 
         async function loadStations() {
             try {
@@ -235,19 +235,17 @@
             const grid = document.getElementById("stationGrid");
             grid.innerHTML = "";
 
-            const sortedStations = rankedStations.slice().sort((a, b) => a.順位 - b.順位); // 順位でソート
-
-            for (let i = 1; i <= 100; i++) {
-                const foundStation = sortedStations.find(station => station.順位 === i);
+            for (let i = 0; i < 100; i++) {
+                const station = rankedStations[i];
                 const item = document.createElement("div");
                 item.className = "grid-item";
 
-                if (foundStation) {
-                    item.textContent = `${foundStation.駅名} (${foundStation.順位}位)`;
-                    item.onclick = () => showPopup(foundStation);
+                if (station) {
+                    item.textContent = `${station.駅名} (${station.順位}位)`;
+                    item.onclick = () => showPopup(station);
                 } else {
-                    item.textContent = `${i}位`; // 未回答は順位のみ表示
-                    item.className += " empty-item"; // 未回答のスタイルを適用
+                    item.textContent = `${i + 1}位`;
+                    item.className += " empty-item";
                 }
 
                 grid.appendChild(item);
@@ -276,7 +274,7 @@
             const found = stations.find(station => normalizeText(station.駅名).includes(input));
 
             if (found && found.順位 <= 100) {
-                rankedStations.push(found);
+                rankedStations[found.順位 - 1] = found; // 該当する順位の位置に駅名データを配置
                 displayGrid();
                 result.textContent = `✅ ${found.駅名} は ${found.順位} 位でランクイン！`;
                 result.className = "rank-in";
