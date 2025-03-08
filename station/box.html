@@ -166,6 +166,19 @@
             z-index: 1000;
             display: none;
         }
+
+        .grid-item {
+            position: relative;
+        }
+
+        .rank-number {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            font-size: 0.8rem;
+            color: #ccc;
+        }
+
     </style>
 </head>
 
@@ -188,6 +201,7 @@
 
     <script>
         let stations = [];
+        let rankedStations = []; // 検索結果を保持する配列
 
         async function loadStations() {
             try {
@@ -203,15 +217,24 @@
             return text.trim().replace(/\s+/g, "").toLowerCase();
         }
 
-        function displayGrid(stations) {
+        function displayGrid(stationsToDisplay) {
             const grid = document.getElementById("stationGrid");
             grid.innerHTML = "";
 
-            for (let i = 0; i < Math.min(100, stations.length); i++) {
-                const station = stations[i];
+            for (let i = 0; i < Math.min(100, stationsToDisplay.length); i++) {
+                const station = stationsToDisplay[i];
                 const item = document.createElement("div");
                 item.className = "grid-item";
-                item.textContent = station.駅名;
+
+                const stationName = document.createElement("span");
+                stationName.textContent = station.駅名;
+                item.appendChild(stationName);
+
+                const rankNumber = document.createElement("span");
+                rankNumber.className = "rank-number";
+                rankNumber.textContent = station.順位;
+                item.appendChild(rankNumber);
+
                 item.onclick = () => showPopup(station);
                 grid.appendChild(item);
             }
@@ -239,7 +262,8 @@
             const found = stations.find(station => normalizeText(station.駅名).includes(input));
 
             if (found && found.順位 <= 100) {
-                displayGrid([found]);
+                rankedStations.push(found); // 検索結果を保持
+                displayGrid(rankedStations);
                 result.textContent = `✅ ${found.駅名} は ${found.順位} 位でランクイン！`;
                 result.className = "rank-in";
             } else {
@@ -250,7 +274,7 @@
             result.style.opacity = 1;
         }
 
-        loadStations(); // 初回ロード時にデータ読み込みのみ実行
+        loadStations();
     </script>
 
 </body>
