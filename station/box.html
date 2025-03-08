@@ -4,7 +4,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>駅名ランクグリッド</title>
     <style>
         body {
@@ -99,17 +99,18 @@
         }
 
         #stationGrid {
-            grid-template-columns: repeat(5, 1fr); /* 列数を5に変更 */
-            gap: 3px; /* ギャップを調整 */
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* グリッドの列数を自動調整 */
+            gap: 3px;
+            margin-top: 10px;
         }
 
         .grid-item {
-            padding: 8px; /* パディングを調整 */
-            font-size: 1rem; /* フォントサイズを調整 */
+            padding: 5pt; /* パディングを調整 */
+            font-size: 0.8rem; /* フォントサイズを調整 */
         }
 
         .rank-number {
-            font-size: 0.6rem; /* フォントサイズを調整 */
+            font-size: 0.5rem; /* フォントサイズを調整 */
         }
     
         /* デスクトップ向けのスタイル */
