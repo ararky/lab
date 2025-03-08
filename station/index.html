@@ -115,6 +115,7 @@
 </head>
 <body>
 
+
     <h1>駅ランク判定</h1>
     <div class="container">
         <input type="text" id="stationInput" placeholder="駅名を入力">
@@ -128,7 +129,7 @@
 
         async function loadStations() {
             try {
-                const response = await fetch('station.json');  // JSONを取得
+                const response = await fetch('station.json');
                 stations = await response.json();
                 console.log("データ読み込み成功:", stations);
             } catch (error) {
@@ -137,7 +138,7 @@
         }
 
         function normalizeText(text) {
-            return text.trim().replace(/\s+/g, ""); // 空白を削除
+            return text.trim().replace(/\s+/g, "").toLowerCase();
         }
 
         function checkRank() {
@@ -151,20 +152,23 @@
                 return;
             }
 
-            const found = stations.find(station => normalizeText(station.駅名) === input);
+            const found = stations.find(station => {
+                const normalizedStationName = normalizeText(station.駅名);
+                return normalizedStationName.includes(input); // 部分一致検索
+            });
 
             if (found && found.順位 <= 100) {
                 result.textContent = `✅ ${found.駅名} は ${found.順位} 位でランクイン！`;
                 result.className = "rank-in";
             } else {
-                result.textContent = `❌ ${input} は圏外です`;
+                result.textContent = `❌ ${input} を含む駅は圏外です`;
                 result.className = "out";
             }
 
-            result.style.opacity = 1;  // フェードイン
+            result.style.opacity = 1;
         }
 
-        loadStations();  // JSONデータをロード
+        loadStations();
     </script>
 
 </body>
