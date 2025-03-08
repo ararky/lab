@@ -4,8 +4,8 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>駅名ランク判定</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>駅名ランクグリッド</title>
     <style>
         body {
             font-family: 'Arial Black', sans-serif;
@@ -88,6 +88,73 @@
             color: #ef9a9a;
         }
 
+        #stationGrid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+            margin-top: 30px;
+        }
+
+        .grid-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: background 0.3s ease;
+            position: relative;
+            font-size: 1.2rem;
+        }
+
+        .grid-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #1e1e1e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
+            z-index: 1000;
+            display: none;
+            background: rgba(30, 30, 30, 0.9);
+            padding: 30px;
+            font-size: 1.2rem;
+        }
+
+        .rank-number {
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            font-size: 0.7rem;
+            color: #ccc;
+        }
+
+        .empty-item {
+            background: rgba(255, 255, 255, 0.1);
+            cursor: default;
+        }
+
+        .correct-item {
+            color: #64ffda;
+            background: linear-gradient(to right, #64ffda, #00bfa5); /* 正解したグリッドの背景色を変更 */
+        }
+
         /* メディアクエリ */
         @media (max-width: 600px) {
             h1 {
@@ -97,30 +164,52 @@
             .container {
                 padding: 25px;
             }
+
+            #stationGrid {
+                display: grid;
+                grid-template-columns: repeat(10, 1fr);
+                gap: 5px;
+                margin-top: 30px;
+            }
+
+            .grid-item {
+                background: rgba(255, 255, 255, 0.05);
+                padding: 12px;
+                border-radius: 10px;
+                text-align: center;
+                cursor: pointer;
+                transition: background 0.3s ease;
+                position: relative;
+                font-size: 1.2rem;
+            }
+
+            .rank-number {
+                font-size: 0.5rem; /* スマートフォン向けにフォントサイズを調整 */
+            }
         }
 
-        /* デスクトップ向けのスタイル */
-        @media (min-width: 601px) {
-            .container {
-                max-width: 800px; /* 修正: デスクトップでの最大幅を調整 */
-                padding: 40px; /* 修正: デスクトップでのパディングを調整 */
-            }
-
-            h1 {
-                font-size: 4rem; /* 修正: デスクトップでのフォントサイズを調整 */
-            }
-
-            input, button {
-                font-size: 2rem; /* 修正: デスクトップでのフォントサイズを調整 */
-                padding: 20px; /* 修正: デスクトップでのパディングを調整 */
-            }
-
-            #result {
-                font-size: 2.5rem; /* 修正: デスクトップでのフォントサイズを調整 */
-            }
+    /* デスクトップ向けのスタイル */
+    @media (min-width: 601px) {
+        #stationGrid {
+            grid-template-columns: repeat(10, 1fr) !important; /* !importantを追加 */
+            gap: 5px;
+            margin-top: 30px;
         }
+
+        .grid-item {
+            padding: 10px !important; /* !importantを追加 */
+            font-size: 1.2rem !important; /* !importantを追加 */
+        }
+
+        .rank-number {
+            font-size: 0.7rem !important; /* !importantを追加 */
+        }
+    }
+
     </style>
+
 </head>
+
 <body>
 
     <h1>駅ランク判定</h1>
@@ -132,9 +221,15 @@
         <p id="result"></p>
     </div>
 
+    <div id="stationGrid"></div>
+
+    <div id="popup" class="popup">
+        <p id="popupContent"></p>
+    </div>
 
     <script>
         let stations = [];
+        let rankedStations = Array(100).fill(null);
 
         async function loadStations() {
             try {
@@ -150,7 +245,43 @@
             return text.trim().replace(/\s+/g, "").toLowerCase();
         }
 
-        function checkRank() {
+        function displayGrid() {
+            const grid = document.getElementById("stationGrid");
+            grid.innerHTML = "";
+
+            for (let i = 0; i < 100; i++) {
+                const station = rankedStations[i];
+                const item = document.createElement("div");
+                item.className = "grid-item";
+
+                if (station) {
+                    item.textContent = station.駅名;
+
+                    const rankNumber = document.createElement("span");
+                    rankNumber.className = "rank-number";
+                    rankNumber.textContent = station.順位;
+                    item.appendChild(rankNumber);
+
+                    item.onclick = () => showPopup(station);
+                    item.classList.add("correct-item"); // 正解したグリッドにクラスを付与
+                } else {
+                    item.textContent = `${i + 1}位`;
+                    item.className += " empty-item";
+                }
+
+                grid.appendChild(item);
+            }
+        }
+
+        function showPopup(station) {
+            const popup = document.getElementById("popup");
+            const content = document.getElementById("popupContent");
+            content.textContent = `順位: ${station.順位}, 駅名: ${station.駅名}, 乗降客数: ${station.乗降客数}`;
+            popup.style.display = "block";
+            popup.onclick = () => popup.style.display = "none";
+        }
+
+        async function checkRank() {
             const input = normalizeText(document.getElementById("stationInput").value);
             const result = document.getElementById("result");
 
@@ -161,12 +292,11 @@
                 return;
             }
 
-            const found = stations.find(station => {
-                const normalizedStationName = normalizeText(station.駅名);
-                return normalizedStationName.includes(input); // 部分一致検索
-            });
+            const found = stations.find(station => normalizeText(station.駅名).includes(input));
 
             if (found && found.順位 <= 100) {
+                rankedStations[found.順位 - 1] = found;
+                displayGrid();
                 result.textContent = `✅ ${found.駅名} は ${found.順位} 位でランクイン！`;
                 result.className = "rank-in";
             } else {
