@@ -22,14 +22,14 @@
             padding: 20px;
             box-sizing: border-box;
         }
-
+    
         h1 {
             font-size: 3rem;
             color: #64ffda;
             margin: 30px 0;
             text-shadow: 0 0 10px #64ffda;
         }
-
+    
         .container {
             background: rgba(255, 255, 255, 0.05);
             padding: 30px;
@@ -39,7 +39,7 @@
             box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
             box-sizing: border-box;
         }
-
+    
         input {
             width: 100%;
             padding: 18px;
@@ -53,7 +53,7 @@
             outline: none;
             box-sizing: border-box;
         }
-
+    
         button {
             width: 100%;
             padding: 18px;
@@ -66,11 +66,11 @@
             transition: transform 0.2s ease-in-out;
             box-sizing: border-box;
         }
-
+    
         button:hover {
             transform: scale(1.05);
         }
-
+    
         #result {
             margin-top: 25px;
             font-size: 2rem;
@@ -79,81 +79,80 @@
             text-shadow: 0 0 15px #64ffda;
             word-break: break-all;
         }
-
+    
         .rank-in {
             color: #a5d6a7;
         }
-
+    
         .out {
             color: #ef9a9a;
         }
-
+    
         /* メディアクエリ */
         @media (max-width: 600px) {
             h1 {
                 font-size: 2.5rem;
             }
-
+    
             .container {
                 padding: 25px;
             }
         }
-
+    
         /* デスクトップ向けのスタイル */
         @media (min-width: 601px) {
             .container {
-                max-width: 800px; /* 修正: デスクトップでの最大幅を調整 */
-                padding: 40px; /* 修正: デスクトップでのパディングを調整 */
+                max-width: 800px;
+                padding: 40px;
             }
-
+    
             h1 {
-                font-size: 4rem; /* 修正: デスクトップでのフォントサイズを調整 */
+                font-size: 4rem;
             }
-
+    
             input, button {
-                font-size: 2rem; /* 修正: デスクトップでのフォントサイズを調整 */
-                padding: 20px; /* 修正: デスクトップでのパディングを調整 */
+                font-size: 2rem;
+                padding: 20px;
             }
-
+    
             #result {
-                font-size: 2.5rem; /* 修正: デスクトップでのフォントサイズを調整 */
+                font-size: 2.5rem;
             }
         }
-
-
+    
         #stationGrid {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
-            gap: 10px;
+            gap: 5px;
             margin-top: 30px;
         }
-
+    
         .grid-item {
             background: rgba(255, 255, 255, 0.05);
-            padding: 15px;
+            padding: 10px; /* パディングを調整 */
             border-radius: 10px;
             text-align: center;
             cursor: pointer;
             transition: background 0.3s ease;
-            opacity: 0;
-            animation: fadeIn 0.5s ease-in-out forwards;
+            position: relative; /* 追加: 相対配置を有効化 */
+            font-size: 1.2rem; /* フォントサイズを調整 */
         }
-
+    
         .grid-item:hover {
             background: rgba(255, 255, 255, 0.1);
         }
-
+    
         @keyframes fadeIn {
             from {
                 opacity: 0;
-                transform: translateY(20px);
+                transform: translateY(10px);
             }
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
-
+    
         .popup {
             position: fixed;
             top: 50%;
@@ -165,32 +164,22 @@
             box-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
             z-index: 1000;
             display: none;
+            background: rgba(30, 30, 30, 0.9); /* 背景色を調整 */
+            padding: 30px; /* パディングを調整 */
+            font-size: 1.2rem; /* フォントサイズを調整 */
         }
-
-        .grid-item {
-            position: relative;
-        }
-
+    
         .rank-number {
             position: absolute;
-            top: 5px;
-            right: 5px;
-            font-size: 0.8rem;
+            top: 3px; /* 位置を調整 */
+            right: 3px; /* 位置を調整 */
+            font-size: 0.7rem; /* フォントサイズを調整 */
             color: #ccc;
         }
-        
-        #stationGrid {
-            grid-template-columns: repeat(10, 1fr);
-            gap: 5px; /* グリッド間のギャップを調整 */
-        }
-
-        .grid-item {
-            padding: 10px; /* グリッドアイテムのパディングを調整 */
-        }
-
+    
         .empty-item {
-            background: rgba(255, 255, 255, 0.02); /* 未回答の背景色を調整 */
-            cursor: default; /* 未回答はクリック不可 */
+            background: rgba(255, 255, 255, 0.02);
+            cursor: default;
         }
     </style>
 
@@ -215,7 +204,7 @@
 
     <script>
         let stations = [];
-        let rankedStations = Array(100).fill(null); // 1-100位の空の配列で初期化
+        let rankedStations = Array(100).fill(null);
 
         async function loadStations() {
             try {
@@ -241,7 +230,13 @@
                 item.className = "grid-item";
 
                 if (station) {
-                    item.textContent = `${station.駅名} (${station.順位}位)`;
+                    item.textContent = station.駅名;
+
+                    const rankNumber = document.createElement("span");
+                    rankNumber.className = "rank-number";
+                    rankNumber.textContent = station.順位;
+                    item.appendChild(rankNumber);
+
                     item.onclick = () => showPopup(station);
                 } else {
                     item.textContent = `${i + 1}位`;
@@ -274,7 +269,7 @@
             const found = stations.find(station => normalizeText(station.駅名).includes(input));
 
             if (found && found.順位 <= 100) {
-                rankedStations[found.順位 - 1] = found; // 該当する順位の位置に駅名データを配置
+                rankedStations[found.順位 - 1] = found;
                 displayGrid();
                 result.textContent = `✅ ${found.駅名} は ${found.順位} 位でランクイン！`;
                 result.className = "rank-in";
