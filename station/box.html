@@ -22,14 +22,14 @@
             padding: 20px;
             box-sizing: border-box;
         }
-    
+
         h1 {
             font-size: 3rem;
             color: #64ffda;
             margin: 30px 0;
             text-shadow: 0 0 10px #64ffda;
         }
-    
+
         .container {
             background: rgba(255, 255, 255, 0.05);
             padding: 30px;
@@ -39,7 +39,7 @@
             box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
             box-sizing: border-box;
         }
-    
+
         input {
             width: 100%;
             padding: 18px;
@@ -53,7 +53,7 @@
             outline: none;
             box-sizing: border-box;
         }
-    
+
         button {
             width: 100%;
             padding: 18px;
@@ -66,11 +66,11 @@
             transition: transform 0.2s ease-in-out;
             box-sizing: border-box;
         }
-    
+
         button:hover {
             transform: scale(1.05);
         }
-    
+
         #result {
             margin-top: 25px;
             font-size: 2rem;
@@ -79,103 +79,37 @@
             text-shadow: 0 0 15px #64ffda;
             word-break: break-all;
         }
-    
+
         .rank-in {
             color: #a5d6a7;
         }
-    
+
         .out {
             color: #ef9a9a;
         }
-    
-        /* メディアクエリ */
-        @media (max-width: 600px) {
-        h1 {
-            font-size: 2.5rem;
-        }
 
-        .container {
-            padding: 25px;
-        }
-
-        #stationGrid {
-            display: grid;
-            display: -webkit-grid; /* 追加: WebKit対応 */
-            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
-            gap: 3px;
-            margin-top: 10px;
-        }
-
-        .grid-item {
-            padding: 5pt; /* パディングを調整 */
-            font-size: 0.8rem; /* フォントサイズを調整 */
-        }
-
-        .rank-number {
-            font-size: 0.5rem; /* フォントサイズを調整 */
-        }
-        
-        /* iPhone向けのスタイル */
-        @media (max-width: 768px) and (orientation: portrait) {
-                #stationGrid {
-                    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); /* グリッドアイテムの最小幅を調整 */
-                    gap: 2px; /* ギャップを調整 */
-                    margin-top: 5px; /* マージンを調整 */
-                }
-
-                .grid-item {
-                    padding: 3px; /* パディングを調整 */
-                    font-size: 0.7rem; /* フォントサイズを調整 */
-                }
-
-                .rank-number {
-                    font-size: 0.4rem; /* フォントサイズを調整 */
-                }
-            }
-
-        /* デスクトップ向けのスタイル */
-        @media (min-width: 601px) {
-            .container {
-                max-width: 800px;
-                padding: 40px;
-            }
-    
-            h1 {
-                font-size: 4rem;
-            }
-    
-            input, button {
-                font-size: 2rem;
-                padding: 20px;
-            }
-    
-            #result {
-                font-size: 2.5rem;
-            }
-        }
-    
         #stationGrid {
             display: grid;
             grid-template-columns: repeat(10, 1fr);
             gap: 5px;
             margin-top: 30px;
         }
-    
+
         .grid-item {
             background: rgba(255, 255, 255, 0.05);
-            padding: 12px; /* パディングを調整 */
+            padding: 12px;
             border-radius: 10px;
             text-align: center;
             cursor: pointer;
             transition: background 0.3s ease;
-            position: relative; /* 追加: 相対配置を有効化 */
-            font-size: 1.2rem; /* フォントサイズを調整 */
+            position: relative;
+            font-size: 1.2rem;
         }
-    
+
         .grid-item:hover {
             background: rgba(255, 255, 255, 0.1);
         }
-    
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -186,7 +120,7 @@
                 transform: translateY(0);
             }
         }
-    
+
         .popup {
             position: fixed;
             top: 50%;
@@ -198,22 +132,58 @@
             box-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
             z-index: 1000;
             display: none;
-            background: rgba(30, 30, 30, 0.9); /* 背景色を調整 */
-            padding: 30px; /* パディングを調整 */
-            font-size: 1.2rem; /* フォントサイズを調整 */
+            background: rgba(30, 30, 30, 0.9);
+            padding: 30px;
+            font-size: 1.2rem;
         }
-    
+
         .rank-number {
             position: absolute;
-            top: 2px; /* 位置を調整 */
-            right: 2x; /* 位置を調整 */
-            font-size: 0.7rem; /* フォントサイズを調整 */
+            top: 2px;
+            right: 2px;
+            font-size: 0.7rem;
             color: #ccc;
         }
-    
+
         .empty-item {
             background: rgba(255, 255, 255, 0.02);
             cursor: default;
+        }
+
+        /* メディアクエリ */
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 2.5rem;
+            }
+
+            .container {
+                padding: 25px;
+            }
+
+            #stationGrid {
+                grid-template-columns: repeat(5, 1fr); /* スマートフォン向けに列数を5に変更 */
+            }
+
+            .grid-item {
+                padding: 5px; /* スマートフォン向けにパディングを調整 */
+                font-size: 0.8rem; /* スマートフォン向けにフォントサイズを調整 */
+            }
+
+            .rank-number {
+                font-size: 0.5rem; /* スマートフォン向けにフォントサイズを調整 */
+            }
+        }
+
+        /* デスクトップ向けのスタイル */
+        @media (min-width: 601px) {
+            .grid-item {
+                padding: 10px; /* デスクトップ向けにパディングを調整 */
+                font-size: 1.2rem; /* デスクトップ向けにフォントサイズを調整 */
+            }
+
+            .rank-number {
+                font-size: 0.7rem; /* デスクトップ向けにフォントサイズを調整 */
+            }
         }
     </style>
 
