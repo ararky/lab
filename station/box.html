@@ -99,7 +99,9 @@
         }
 
         #stationGrid {
-            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr)); /* グリッドの列数を自動調整 */
+            display: grid;
+            display: -webkit-grid; /* 追加: WebKit対応 */
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr));
             gap: 3px;
             margin-top: 10px;
         }
@@ -112,7 +114,25 @@
         .rank-number {
             font-size: 0.5rem; /* フォントサイズを調整 */
         }
-    
+        
+        /* iPhone向けのスタイル */
+        @media (max-width: 768px) and (orientation: portrait) {
+                #stationGrid {
+                    grid-template-columns: repeat(auto-fit, minmax(40px, 1fr)); /* グリッドアイテムの最小幅を調整 */
+                    gap: 2px; /* ギャップを調整 */
+                    margin-top: 5px; /* マージンを調整 */
+                }
+
+                .grid-item {
+                    padding: 3px; /* パディングを調整 */
+                    font-size: 0.7rem; /* フォントサイズを調整 */
+                }
+
+                .rank-number {
+                    font-size: 0.4rem; /* フォントサイズを調整 */
+                }
+            }
+
         /* デスクトップ向けのスタイル */
         @media (min-width: 601px) {
             .container {
