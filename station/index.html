@@ -18,13 +18,13 @@
             justify-content: flex-start;
             min-height: 100vh;
             margin: 0;
-            font-size: 24px;
-            padding: 20px;
+            font-size: 18px;
+            padding:   10px;
             box-sizing: border-box;
         }
 
         h1 {
-            font-size: 3rem;
+            font-size: 1.5rem;
             color: #64ffda;
             margin: 30px 0;
             text-shadow: 0 0 10px #64ffda;
@@ -32,7 +32,7 @@
 
         .container {
             background: rgba(255, 255, 255, 0.05);
-            padding: 30px;
+            padding: 15px;
             border-radius: 20px;
             width: 90%;
             max-width: 500px;
@@ -42,7 +42,7 @@
 
         input {
             width: 100%;
-            padding: 18px;
+            padding: 8px;
             font-size: 1.6rem;
             border: 2px solid #64ffda;
             border-radius: 15px;
@@ -56,8 +56,8 @@
 
         button {
             width: 100%;
-            padding: 18px;
-            font-size: 1.6rem;
+            padding: 8px;
+            font-size: 1rem;
             border: none;
             border-radius: 15px;
             background: linear-gradient(to right, #64ffda, #00bfa5);
@@ -92,18 +92,18 @@
             display: grid;
             grid-template-columns: repeat(10, 1fr);
             gap: 5px;
-            margin-top: 30px;
+            margin-top: 15px;
         }
 
         .grid-item {
             background: rgba(255, 255, 255, 0.05);
-            padding: 12px;
+            padding: 6px;
             border-radius: 10px;
             text-align: center;
             cursor: pointer;
             transition: background 0.3s ease;
             position: relative;
-            font-size: 1.2rem;
+            font-size: 1rem;
         }
 
         .grid-item:hover {
@@ -165,7 +165,7 @@
             }
 
             .container {
-                padding: 25px;
+                padding: 20px;
             }
 
             #stationGrid {
@@ -269,35 +269,37 @@
         }
 
         async function checkRank() {
-    const input = normalizeText(document.getElementById("stationInput").value);
-    const result = document.getElementById("result");
+            const input = normalizeText(document.getElementById("stationInput").value);
+            const result = document.getElementById("result");
 
-    if (!input) {
-        result.textContent = "駅名を入力してください";
-        result.className = "out";
-        result.style.opacity = 1;
-        return;
-    }
+            if (!input) {
+                result.textContent = "駅名を入力してください";
+                result.className = "out";
+                result.style.opacity = 1;
+                return;
+            }
 
-    const found = stations.find(station => normalizeText(station.駅名).includes(input));
+            const found = stations.find(station => normalizeText(station.駅名) === input); // 完全一致に変更
 
-    if (found) {
-        const rank = parseInt(found.順位); // 順位を数値に変換
-        if (rank <= 100) {
-            rankedStations[rank - 1] = found;
-            displayGrid();
-            result.textContent = `✅ ${found.駅名} は ${rank} 位でランクイン！`;
-            result.className = "rank-in";
-        } else {
-            result.textContent = `✅ ${found.駅名} は ${rank} 位です！`;
-            result.className = "rank-in";
+            if (found) {
+                const rank = parseInt(found.順位);
+                if (rank <= 100) {
+                    rankedStations[rank - 1] = found;
+                    displayGrid();
+                    result.textContent = `✅ ${found.駅名} は ${rank} 位でランクイン！`;
+                    result.className = "rank-in";
+                } else {
+                    result.textContent = `✅ ${found.駅名} は ${rank} 位です！`;
+                    result.className = "rank-in";
+                }
+            } else {
+                result.textContent = `❌ ${input} は圏外です`;
+                result.className = "out";
+                result.style.color = "red"; // 文字色を赤色に変更
+            }
+            result.style.opacity = 1;
         }
-    } else {
-        result.textContent = `❌ ${input} を含む駅は圏外です`;
-        result.className = "out";
-    }
-    result.style.opacity = 1;
-}
+
         loadStations();
     </script>
 </body>
