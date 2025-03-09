@@ -57,6 +57,7 @@
         }
 
         button {
+            margin-bottom: 5px; /* マージンを設定 */
             width: 100%;
             padding: 8px;
             font-size: 1rem;
@@ -74,9 +75,7 @@
         }
 
         #result {
-            margin: 5px 0;
-            margin-top: 10px;
-            margin-top: 10px;
+            margin: 10px 0 5px; /* マージンを調整 */
             font-size: 2rem;
             font-weight: bold;
             color: #64ffda;
@@ -299,10 +298,10 @@
             } else {
                 result.textContent = `残念！ ${input} はランク外です...`;
                 result.className = "out";
-                result.style.color = "red"; // 文字色を赤色に変更
-                result.style.fontFamily = "sans-serif"; // フォントカラーを変更
+                result.style.color = "red";
+                result.style.fontFamily = "sans-serif"; // フォントファミリーを変更
             }
-            result.style.opacity = 1
+            result.style.opacity = 1;
                 }
 
         loadStations();
