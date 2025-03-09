@@ -318,16 +318,16 @@
                     result.style.color = "";
                 } else {
                     result.textContent = `✅ ${found.駅名} は ${rank} 位です！`;
-                    result.className = "rank-in";
-                    result.style.color = "";
+                    result.className = "out"; // outクラスを適用
+                    result.style.color = "red"; // 赤字にする
                 }
             } else {
                 result.textContent = `残念！ ${input} はランク外です...`;
                 result.className = "out";
                 result.style.color = "red";
-                result.style.fontFamily = "monospace"; // フォントをmonospaceに変更
-                result.style.fontSize = "2.5rem"; // フォントサイズを大きくする
-                result.style.fontWeight = "bold"; // 太字にする
+                result.style.fontFamily = "monospace";
+                result.style.fontSize = "2.5rem";
+                result.style.fontWeight = "bold";
             }
             result.style.opacity = 1;
         }
