@@ -306,7 +306,7 @@
                 return;
             }
 
-            const found = stations.find(station => normalizeText(station.駅名).includes(input)); // 部分一致に変更
+            const found = stations.find(station => normalizeText(station.駅名).includes(input));
 
             if (found) {
                 const rank = parseInt(found.順位);
