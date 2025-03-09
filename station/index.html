@@ -291,18 +291,20 @@
                     displayGrid();
                     result.textContent = `✅ ${found.駅名} は ${rank} 位でランクイン！`;
                     result.className = "rank-in";
+                    result.style.color = ""; // ランクイン時は色をリセット
                 } else {
                     result.textContent = `✅ ${found.駅名} は ${rank} 位です！`;
                     result.className = "rank-in";
+                    result.style.color = ""; // ランクイン時は色をリセット
                 }
             } else {
                 result.textContent = `残念！ ${input} はランク外です...`;
                 result.className = "out";
                 result.style.color = "red";
-                result.style.fontFamily = "'sans-serif' !important"; // 修正
+                result.style.fontFamily = "'sans-serif' !important";
             }
             result.style.opacity = 1;
-                }
+        }
 
         loadStations();
     </script>
