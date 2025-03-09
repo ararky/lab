@@ -306,7 +306,7 @@
                 return;
             }
 
-            const found = stations.find(station => normalizeText(station.駅名) === input); // 完全一致に変更
+            const found = stations.find(station => normalizeText(station.駅名).includes(input)); // 部分一致に変更
 
             if (found) {
                 const rank = parseInt(found.順位);
@@ -315,11 +315,11 @@
                     displayGrid();
                     result.textContent = `✅ ${found.駅名} は ${rank} 位でランクイン！`;
                     result.className = "rank-in";
-                    result.style.color = ""; // ランクイン時は色をリセット
+                    result.style.color = "";
                 } else {
                     result.textContent = `✅ ${found.駅名} は ${rank} 位です！`;
                     result.className = "rank-in";
-                    result.style.color = ""; // ランクイン時は色をリセット
+                    result.style.color = "";
                 }
             } else {
                 result.textContent = `残念！ ${input} はランク外です...`;
