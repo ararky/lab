@@ -325,7 +325,9 @@
                 result.textContent = `残念！ ${input} はランク外です...`;
                 result.className = "out";
                 result.style.color = "red";
-                result.style.fontFamily = "'sans-serif' !important";
+                result.style.fontFamily = "monospace"; // フォントをmonospaceに変更
+                result.style.fontSize = "2.5rem"; // フォントサイズを大きくする
+                result.style.fontWeight = "bold"; // 太字にする
             }
             result.style.opacity = 1;
         }
