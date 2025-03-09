@@ -297,12 +297,13 @@
                     result.className = "rank-in";
                 }
             } else {
-                result.textContent = `❌ ${input} は圏外です`;
+                result.textContent = `残念！ ${input} はランク外です...`;
                 result.className = "out";
                 result.style.color = "red"; // 文字色を赤色に変更
+                result.style.fontFamily = "sans-serif"; // フォントカラーを変更
             }
-            result.style.opacity = 1;
-        }
+            result.style.opacity = 1
+                }
 
         loadStations();
     </script>
