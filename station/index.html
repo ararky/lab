@@ -203,15 +203,38 @@
             }
         }
 
+        #suggestions {
+            position: absolute;
+            width: 90%;
+            max-width: 500px;
+            background: #1e1e1e;
+            border: 1px solid #64ffda;
+            border-radius: 0 0 15px 15px;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            z-index: 1000;
+            display: none;
+        }
+        #suggestions li {
+            padding: 8px;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        #suggestions li:hover {
+            background: #333;
+        }
+
     </style>
 
 </head>
 
 <body>
     <h1>駅ランク判定</h1>
-    <div class="container">
+    <div class="container" style="position: relative;">
         <form onsubmit="checkRank(); return false;">
-            <input type="text" id="stationInput" placeholder="駅名を入力">
+            <input type="text" id="stationInput" placeholder="駅名を入力" oninput="showSuggestions()">
+            <ul id="suggestions"></ul>
             <input type="submit" style="display: none;">
         </form>
         <p id="result"></p>
@@ -220,6 +243,7 @@
     <div id="popup" class="popup">
         <p id="popupContent"></p>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/string-similarity/umd/string-similarity.min.js"></script>
     <script>
         let stations = [];
         let rankedStations = Array(100).fill(null);
@@ -304,6 +328,41 @@
                 result.style.fontFamily = "'sans-serif' !important";
             }
             result.style.opacity = 1;
+        }
+
+        function showSuggestions() {
+            const input = normalizeText(document.getElementById("stationInput").value);
+            const suggestions = document.getElementById("suggestions");
+            suggestions.innerHTML = "";
+
+            if (!input) {
+                suggestions.style.display = "none";
+                return;
+            }
+
+            const filteredStations = stations.filter(station => normalizeText(station.駅名).includes(input));
+            const similarStations = stations.map(station => ({
+                station,
+                similarity: stringSimilarity.compareTwoStrings(normalizeText(station.駅名), input)
+            })).filter(item => item.similarity > 0.5).sort((a, b) => b.similarity - a.similarity).map(item => item.station);
+
+            const combinedStations = [...new Set([...filteredStations, ...similarStations])];
+
+            if (combinedStations.length > 0) {
+                combinedStations.slice(0, 10).forEach(station => {
+                    const li = document.createElement("li");
+                    li.textContent = station.駅名;
+                    li.onclick = () => {
+                        document.getElementById("stationInput").value = station.駅名;
+                        suggestions.style.display = "none";
+                        checkRank();
+                    };
+                    suggestions.appendChild(li);
+                });
+                suggestions.style.display = "block";
+            } else {
+                suggestions.style.display = "none";
+            }
         }
 
         loadStations();
