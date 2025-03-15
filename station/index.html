@@ -32,13 +32,18 @@
 
         .container {
             margin: 10px 0;
-            background: rgba(255, 255, 255, 0.05);
             padding: 15px;
             border-radius: 20px;
             width: 90%;
             max-width: 500px;
-            box-shadow: 0 0 20px rgba(100, 255, 218, 0.3);
-            box-sizing: border-box;
+            background: rgba(255, 255, 255, 0.1); /* 背景を半透明の白色に */
+    box-shadow: 
+        inset -3px 0 2px -2px rgba(0, 0, 0, 0.15), /* 左側の内側の影 */
+        inset 0 -1px 1px rgba(255, 255, 255, 1), /* 下側の内側の影 */
+        inset 0 1px 1px rgba(255, 255, 255, 0.35), /* 上側の内側の影 */
+        inset 0 2px 30px rgba(0, 0, 0, 0.36), /* 下側の内側の大きな影 */
+        inset 3px 0 2px -2px rgba(0, 0, 0, 0.15); /* 右側の内側の影 */
+    backdrop-filter: blur(10px); /* 背景ぼかし */            box-sizing: border-box;
         }
 
         input {
