@@ -37,14 +37,13 @@
             width: 90%;
             max-width: 500px;
             box-sizing: border-box;
-            background: rgba(255, 255, 255, 0.4); /* 背景色を調整 */
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* グラデーション背景 */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* 薄いボーダー */
             box-shadow: 
-                inset -4px 0 3px -2px rgba(0, 0, 0, 0.4), /* 影をより強くする */
-                inset 0 -2px 2px rgba(255, 255, 255, 0.9),
-                inset 0 2px 2px rgba(255, 255, 255, 0.7),
-                inset 0 3px 30px rgba(0, 0, 0, 0.5),
-                inset 4px 0 3px -2px rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(20px); /* ぼかしを強くする */
+                0 8px 32px 0 rgba(0, 0, 0, 0.1), /* 外側の影 */
+                inset 0 2px 2px rgba(255, 255, 255, 0.2), /* 上側の内側の影 */
+                inset 0 -2px 2px rgba(0, 0, 0, 0.1); /* 下側の内側の影 */
+            backdrop-filter: blur(10px); /* ぼかし効果 */
             border: 1px solid rgba(255, 255, 255, 0.4); /* ボーダーを調整 */
         }
 
