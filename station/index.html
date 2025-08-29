@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -9,7 +7,7 @@
     <style>
         body {
             font-family: 'Arial Black', sans-serif;
-            background: linear-gradient(to bottom, #121212, #333); /* グラデーション背景 */
+            background: linear-gradient(to bottom, #121212, #333);
             color: #e0e0e0;
             text-align: center;
             display: flex;
@@ -44,7 +42,7 @@
                 inset 0 2px 2px rgba(255, 255, 255, 0.2) !important,
                 inset 0 -2px 2px rgba(0, 0, 0, 0.1) !important;
             backdrop-filter: blur(10px) !important;
-            border: 1px solid rgba(255, 255, 255, 0.4); /* ボーダーを調整 */
+            border: 1px solid rgba(255, 255, 255, 0.4);
         }
 
         input {
@@ -63,7 +61,7 @@
         }
 
         button {
-            margin-bottom: 5px; /* マージンを設定 */
+            margin-bottom: 5px;
             width: 100%;
             padding: 8px;
             font-size: 1rem;
@@ -81,12 +79,12 @@
         }
 
         #result {
-            margin: 10px 0 5px; /* マージンを調整 */
+            margin: 10px 0 5px;
             font-size: 2rem;
             font-weight: bold;
             color: #64ffda;
-            text-shadow: none; /* text-shadowを削除 */
-            filter: none; /* filterを削除 */
+            text-shadow: none;
+            filter: none;
             word-break: break-all;
         }
 
@@ -161,14 +159,13 @@
         }
 
         .correct-item {
-            color: #ffeb3b; /* 文字色を明るい黄色に変更 */
-            background: #003300; /* 背景色をもっと暗い緑色に変更 */
-            border: 3px solid #66bb6a; /* ボーダーを太く、色を調整 */
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4); /* シャドウを濃く */
-            font-weight: bold; /* フォントを太字に */
+            color: #ffeb3b;
+            background: #003300;
+            border: 3px solid #66bb6a;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+            font-weight: bold;
         }
 
-        /* メディアクエリ */
         @media (max-width: 600px) {
             h1 {
                 font-size: 2.5rem;
@@ -179,12 +176,12 @@
             }
 
             #stationGrid {
-                grid-template-columns: repeat(5, 1fr); /* スマートフォン向けに列数を5に変更 */
+                grid-template-columns: repeat(5, 1fr);
             }
 
             .grid-item {
-                padding: 8px; /* スマートフォン向けにパディングを調整 */
-                font-size: 0.8rem; /* スマートフォン向けにフォントサイズを調整 */
+                padding: 8px;
+                font-size: 0.8rem;
             }
 
             .rank-number {
@@ -192,7 +189,6 @@
             }
         }
 
-        /* デスクトップ向けのスタイル */
         @media (min-width: 601px) {
             #stationGrid {
                 grid-template-columns: repeat(10, 1fr) !important;
@@ -222,6 +218,8 @@
             margin: 0;
             z-index: 1000;
             display: none;
+            left: 50%;
+            transform: translateX(-50%);
         }
         #suggestions li {
             padding: 8px;
@@ -313,7 +311,7 @@
                 return;
             }
 
-            const found = stations.find(station => normalizeText(station.駅名).includes(input));
+            const found = stations.find(station => normalizeText(station.駅名) === input);
 
             if (found) {
                 const rank = parseInt(found.順位);
@@ -323,10 +321,16 @@
                     result.textContent = `✅ ${found.駅名} は ${rank} 位でランクイン！`;
                     result.className = "rank-in";
                     result.style.color = "";
+                    result.style.fontFamily = "";
+                    result.style.fontSize = "";
+                    result.style.fontWeight = "";
                 } else {
                     result.textContent = `✅ ${found.駅名} は ${rank} 位です！`;
-                    result.className = "out"; // outクラスを適用
-                    result.style.color = "red"; // 赤字にする
+                    result.className = "out";
+                    result.style.color = "red";
+                    result.style.fontFamily = "monospace";
+                    result.style.fontSize = "2.5rem";
+                    result.style.fontWeight = "bold";
                 }
             } else {
                 result.textContent = `残念！ ${input} はランク外です...`;
@@ -349,16 +353,13 @@
                 return;
             }
 
-            const filteredStations = stations.filter(station => normalizeText(station.駅名).includes(input));
             const similarStations = stations.map(station => ({
                 station,
                 similarity: stringSimilarity.compareTwoStrings(normalizeText(station.駅名), input)
             })).filter(item => item.similarity > 0.5).sort((a, b) => b.similarity - a.similarity).map(item => item.station);
 
-            const combinedStations = [...new Set([...filteredStations, ...similarStations])];
-
-            if (combinedStations.length > 0) {
-                combinedStations.slice(0, 10).forEach(station => {
+            if (similarStations.length > 0) {
+                similarStations.slice(0, 10).forEach(station => {
                     const li = document.createElement("li");
                     li.textContent = station.駅名;
                     li.onclick = () => {
