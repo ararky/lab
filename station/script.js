@@ -5,7 +5,7 @@ let rankedStations = Array(100).fill(null);
 
 async function loadStations() {
   try {
-    const response = await fetch(JSON_URL, { cache: 'no-store' });
+    const response = await fetch('station.json', { cache: 'no-store' });
     const text = await response.text();
     try {
       stations = JSON.parse(text);
