@@ -1,20 +1,29 @@
 let stations = [];
 let rankedStations = Array(100).fill(null);
 
-
-
 async function loadStations() {
+  try {
+    const url = 'station.json?v=5'; // いま確認用の固定バージョン
+    console.log('fetch:', url, location.href);
+    const response = await fetch(url, { cache: 'no-store' });
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const text = await response.text();
     try {
-        const response = await fetch('station.json?v=5', { cache: 'no-store' });
-        const text = await response.text();
-    try {
-      stations = JSON.parse(text);
+      const data = JSON.parse(text);
+      if (!Array.isArray(data)) throw new Error('JSON root is not an array');
+      stations = data;
       console.log('データ読み込み成功:', stations.length);
     } catch (e) {
-      console.error('JSON parse 失敗:', e, text.slice(0, 200));
+      console.error('JSON parse 失敗:', e, '先頭200文字=', text.slice(0, 200));
+      stations = [];
     }
   } catch (error) {
     console.error('JSONの読み込みに失敗しました:', error);
+    stations = [];
+  } finally {
+    // ロード完了後に入力を有効化
+    const inputEl = document.getElementById('stationInput');
+    if (inputEl) inputEl.disabled = false;
   }
 }
 
@@ -65,6 +74,14 @@ async function checkRank() {
     return;
   }
 
+  // ★ データ未ロード/失敗のガード
+  if (!Array.isArray(stations) || stations.length === 0) {
+    result.textContent = "データ未取得です。station.json のパス/JSON構文/キャッシュをご確認ください。";
+    result.className = "out";
+    result.style.opacity = 1;
+    return;
+  }
+
   const found = pickStationByName(raw);
 
   if (found) {
@@ -99,6 +116,12 @@ function showSuggestions() {
   suggestions.innerHTML = "";
 
   if (!input) { suggestions.style.display = "none"; return; }
+
+  // ★ データ未ロード/失敗のガード
+  if (!Array.isArray(stations) || stations.length === 0) {
+    suggestions.style.display = "none";
+    return;
+  }
 
   const exacts = stations.filter(s => normalizeText(s.駅名) === input);
   const partials = stations.filter(s => {
@@ -137,16 +160,13 @@ function showSuggestions() {
 function pickStationByName(rawInput) {
   const q = normalizeText(rawInput);
 
-  // 1) 完全一致を最優先
   const exact = stations.find(s => normalizeText(s.駅名) === q);
   if (exact) return exact;
 
-  // 2) 部分一致の候補
   const cands = stations.filter(s => normalizeText(s.駅名).includes(q));
   if (cands.length === 0) return null;
   if (cands.length === 1) return cands[0];
 
-  // 3) 類似度 + ヒューリスティック
   const scored = cands.map(s => {
     const name = normalizeText(s.駅名);
     const sim = (window.stringSimilarity?.compareTwoStrings)
@@ -158,5 +178,7 @@ function pickStationByName(rawInput) {
   return scored[0].s;
 }
 
-// 起動
+// 起動：ロード中は入力ロック
+const inputEl = document.getElementById('stationInput');
+if (inputEl) inputEl.disabled = true;
 loadStations();
