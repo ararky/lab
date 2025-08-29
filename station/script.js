@@ -4,9 +4,9 @@ let rankedStations = Array(100).fill(null);
 
 
 async function loadStations() {
-  try {
-    const response = await fetch('station.json', { cache: 'no-store' });
-    const text = await response.text();
+    try {
+        const response = await fetch('station.json?v=5', { cache: 'no-store' });
+        const text = await response.text();
     try {
       stations = JSON.parse(text);
       console.log('データ読み込み成功:', stations.length);
