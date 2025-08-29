@@ -1,0 +1,172 @@
+body {
+    font-family: 'Arial Black', sans-serif;
+    background: linear-gradient(to bottom, #121212, #333);
+    color: #e0e0e0;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    min-height: 100vh;
+    margin: 0;
+    font-size: 18px;
+    padding: 10px;
+    box-sizing: border-box;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+    color: #64ffda;
+    margin: 5px 0;
+    text-shadow: 0 0 10px #64ffda;
+  }
+  
+  .container {
+    margin: 10px 0;
+    padding: 15px;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 500px;
+    box-sizing: border-box;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow:
+      0 8px 32px 0 rgba(0, 0, 0, 0.1) !important,
+      inset 0 2px 2px rgba(255, 255, 255, 0.2) !important,
+      inset 0 -2px 2px rgba(0, 0, 0, 0.1) !important;
+    backdrop-filter: blur(10px) !important;
+  }
+  
+  input {
+    margin: 5px 0;
+    width: 100%;
+    padding: 8px;
+    font-size: 1.6rem;
+    border: 2px solid #64ffda;
+    border-radius: 15px;
+    text-align: center;
+    background: #1e1e1e;
+    color: #64ffda;
+    margin-bottom: 5px;
+    outline: none;
+    box-sizing: border-box;
+  }
+  
+  button {
+    margin-bottom: 5px;
+    width: 100%;
+    padding: 8px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 15px;
+    background: linear-gradient(to right, #64ffda, #00bfa5);
+    color: #121212;
+    cursor: pointer;
+    transition: transform 0.2s ease-in-out;
+    box-sizing: border-box;
+  }
+  button:hover { transform: scale(1.05); }
+  
+  #result {
+    margin: 10px 0 5px;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #64ffda;
+    text-shadow: none;
+    filter: none;
+    word-break: break-all;
+  }
+  
+  .rank-in { color: #a5d6a7; }
+  .out { color: #ef9a9a; }
+  
+  #stationGrid {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 5px;
+    margin-top: 15px;
+  }
+  
+  .grid-item {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 6px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    position: relative;
+    font-size: 1rem;
+  }
+  .grid-item:hover { background: rgba(255, 255, 255, 0.1); }
+  
+  .popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(30, 30, 30, 0.9);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(100, 255, 218, 0.5);
+    z-index: 1000;
+    display: none;
+    font-size: 1.2rem;
+  }
+  
+  .rank-number {
+    position: absolute;
+    top: 2px;
+    right: 2px;
+    font-size: 0.7rem;
+    color: #ccc;
+  }
+  
+  .empty-item {
+    background: rgba(255, 255, 255, 0.1);
+    cursor: default;
+  }
+  
+  .correct-item {
+    color: #ffeb3b;
+    background: #003300;
+    border: 3px solid #66bb6a;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+    font-weight: bold;
+  }
+  
+  /* スマホ */
+  @media (max-width: 600px) {
+    h1 { font-size: 2.5rem; }
+    .container { padding: 20px; }
+    #stationGrid { grid-template-columns: repeat(5, 1fr); }
+    .grid-item { padding: 8px; font-size: 0.8rem; }
+    .rank-number { font-size: 0.5rem; }
+  }
+  
+  /* デスクトップ */
+  @media (min-width: 601px) {
+    #stationGrid { grid-template-columns: repeat(10, 1fr) !important; gap: 5px; margin-top: 30px; }
+    .grid-item { padding: 10px !important; font-size: 1.2rem !important; }
+    .rank-number { font-size: 0.7rem !important; }
+  }
+  
+  #suggestions {
+    position: absolute;
+    width: 90%;
+    max-width: 500px;
+    background: #1e1e1e;
+    border: 1px solid #64ffda;
+    border-radius: 0 0 15px 15px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    z-index: 1000;
+    display: none;
+  }
+  #suggestions li {
+    padding: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  #suggestions li:hover { background: #333; }
+  
